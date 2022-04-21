@@ -13,8 +13,19 @@
                             {{ session('status') }}
                         </div>
                     @endif
-
                     {{ __('You are logged in now!') }}
+                        <form method="POST" action="{{ route('createEvent') }}">
+                            @csrf
+                            <button type="submit" class="btn btn-primary">
+                                {{ __('Create Event') }}
+                            </button>
+                        </form>
+                        <form method="POST" action="{{ route('events') }}">
+                            @csrf
+                            <button type="submit" class="btn btn-primary">
+                                {{ __('All Events') }}
+                            </button>
+                        </form>
                 </div>
             </div>
         </div>
