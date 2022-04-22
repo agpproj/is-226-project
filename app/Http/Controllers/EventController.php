@@ -7,11 +7,15 @@ use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
-
-    public function displayEventDetails()
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
     {
         $events = $this->getAllEvents();
-        return view('pages.event',compact('events'));
+        return view('pages.event.event_all',compact('events'));
     }
 
     /**
@@ -21,7 +25,7 @@ class EventController extends Controller
      */
     public function create()
     {
-        return view('pages.createEvent');
+        return view('pages.event.createEvent');
     }
     /**
      * Store a newly created resource in storage.
@@ -42,18 +46,58 @@ class EventController extends Controller
         $event->AllowedCapacity = $request->allowedCapacity;
 
         $event->save();
-        return view('pages.createEvent');
+        return view('pages.event.createEvent');
     }
 
-    public function updateEventDetails()
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
     {
+        $event =$this->getEventDetails($id);
+        return view('pages.event.event_details', compact('event'));
+    }
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $event = $this->getEventDetails($id);
+        return view('pages.event.edit_event', compact('event'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $event = Event::where('EventID', '=', $id)->first();
+        $event->EventName = $request->eventName;
+        $event->EventDescription = $request->eventDescription;
+        $event->EventStartDate = $request->eventStartDate;
+        $event->EventEndDate = $request->eventEndDate;
+        $event->EventStartTime = $request->eventStartTime;
+        $event->EventEndTime = $request->eventEndTime;
+        $event->AllowedCapacity = $request->allowedCapacity;
+        $event->save();
+
+        return view('home');
     }
 
     //retrive event details of the EventID
     public function getEventDetails($id){
-        $event = Event::firstWhere('EventID',1);
-        return $event;
+        return Event::find($id);
     }
 
     //retrive all events

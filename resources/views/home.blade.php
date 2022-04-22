@@ -26,6 +26,18 @@
                                 {{ __('All Events') }}
                             </button>
                         </form>
+                        <form method="POST" action="{{ route('venues') }}">
+                            @csrf
+                            <button type="submit" class="btn btn-primary">
+                                {{ __('All Venues') }}
+                            </button>
+                        </form>
+                        <form method="POST" action="{{ route('create.venue') }}">
+                            @csrf
+                            <button type="submit" class="btn btn-primary">
+                                {{ __('Create Venues') }}
+                            </button>
+                        </form>
                 </div>
             </div>
         </div>

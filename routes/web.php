@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DataBaseController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\VenueController;
 
 use App\Food;
 /*
@@ -37,7 +38,21 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::post('/profile/{id}', [ProfileController::class, 'showProfile'])->name('profile');
 
 //Route for pages
-//Event page
-Route::post('/events', [EventController::class, 'displayEventDetails'])->name('events');
+
+//Event pages
+Route::post('/events', [EventController::class, 'index'])->name('events');
 Route::post('/createEvent', [EventController::class, 'create'])->name('createEvent');
 Route::post('/event', [EventController::class, 'store'])->name('store.event');
+Route::post('/event/details/{id}', [EventController::class, 'show'])->name('show.event');
+Route::post('/event/details/edit/{id}', [EventController::class, 'edit'])->name('edit.event');
+Route::post('/event/details/update/{id}', [EventController::class, 'update'])->name('update.event');
+
+//Venue pages
+Route::post('/venues', [VenueController::class, 'index'])->name('venues');
+Route::post('/venue/create', [VenueController::class, 'create'])->name('create.venue');
+Route::post('/venue', [VenueController::class, 'store'])->name('store.venue');
+Route::post('/venue/details/{id}', [VenueController::class, 'show'])->name('show.venue');
+Route::post('/venue/details/edit/{id}', [VenueController::class, 'edit'])->name('edit.venue');
+Route::post('/venue/details/update/{id}', [VenueController::class, 'update'])->name('update.venue');
+Route::post('/venue/details/delete/{id}', [VenueController::class, 'destroy'])->name('delete.venue');
+
