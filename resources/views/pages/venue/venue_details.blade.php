@@ -15,6 +15,10 @@
                         <button type="submit" formaction="{{ route('delete.venue', $venue->VenueID) }}" class="btn btn-primary">
                             {{ __('Delete') }}
                         </button>
+                        @csrf
+                        <button type="submit" formaction="{{ route('book.event', $venue->VenueID)}}" class="btn btn-primary">
+                            {{ __('Book Event') }}
+                        </button>
                     </form>
                 </div>
             </div>

@@ -14,22 +14,28 @@
                         </div>
                     @endif
                     {{ __('You are logged in now!') }}
-                        <form method="POST" action="{{ route('createEvent') }}">
+{{--                        <form method="POST" action="{{ route('createEvent') }}">
                             @csrf
                             <button type="submit" class="btn btn-primary">
                                 {{ __('Create Event') }}
                             </button>
-                        </form>
+                        </form>--}}
                         <form method="POST" action="{{ route('events') }}">
                             @csrf
                             <button type="submit" class="btn btn-primary">
                                 {{ __('All Events') }}
                             </button>
                         </form>
-                        <form method="POST" action="{{ route('venues') }}">
+                        <form method="POST" action="{{ route('venues.all') }}">
                             @csrf
                             <button type="submit" class="btn btn-primary">
                                 {{ __('All Venues') }}
+                            </button>
+                        </form>
+                        <form method="POST" action="{{ route('venues') }}">
+                            @csrf
+                            <button type="submit" class="btn btn-primary">
+                                {{ __('My Venues') }}
                             </button>
                         </form>
                         <form method="POST" action="{{ route('create.venue') }}">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\EventVenueContract;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -23,9 +24,9 @@ class EventController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
-        return view('pages.event.createEvent');
+        return view('pages.event.createEvent', compact('id'));
     }
     /**
      * Store a newly created resource in storage.
@@ -33,7 +34,7 @@ class EventController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
         $event = new Event;
 
@@ -46,7 +47,18 @@ class EventController extends Controller
         $event->AllowedCapacity = $request->allowedCapacity;
 
         $event->save();
-        return view('pages.event.createEvent');
+
+        $event = Event::find($event->EventID);
+        $eventVenueContract = new EventVenueContract;
+        $eventVenueContract->BookStartDate = $request->bookStartDate;
+        $eventVenueContract->BookEndDate = $request->bookEndDate;
+        $eventVenueContract->BookStartTime = $request->bookStartTime;
+        $eventVenueContract->BookEndTime = $request->bookEndTime;
+        $eventVenueContract->EventID  = $event->EventID;
+        $eventVenueContract->VenueID  = $id;
+        $eventVenueContract->ApprovalStatus = 'Pending';
+        $event->eventVenueContract()->save($eventVenueContract);
+        return view('pages.event.createEvent', compact('id'));
     }
 
     /**

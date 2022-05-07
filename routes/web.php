@@ -41,14 +41,15 @@ Route::post('/profile/{id}', [ProfileController::class, 'showProfile'])->name('p
 
 //Event pages
 Route::post('/events', [EventController::class, 'index'])->name('events');
-Route::post('/createEvent', [EventController::class, 'create'])->name('createEvent');
-Route::post('/event', [EventController::class, 'store'])->name('store.event');
+Route::post('/create/event/{id}', [EventController::class, 'create'])->name('book.event');
+Route::post('/event/{id}', [EventController::class, 'store'])->name('store.event');
 Route::post('/event/details/{id}', [EventController::class, 'show'])->name('show.event');
 Route::post('/event/details/edit/{id}', [EventController::class, 'edit'])->name('edit.event');
 Route::post('/event/details/update/{id}', [EventController::class, 'update'])->name('update.event');
 
 //Venue pages
 Route::post('/venues', [VenueController::class, 'index'])->name('venues');
+Route::post('/venues/all', [VenueController::class, 'index'])->name('venues.all');
 Route::post('/venue/create', [VenueController::class, 'create'])->name('create.venue');
 Route::post('/venue', [VenueController::class, 'store'])->name('store.venue');
 Route::post('/venue/details/{id}', [VenueController::class, 'show'])->name('show.venue');
