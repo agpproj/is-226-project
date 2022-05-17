@@ -11,4 +11,10 @@ class Event extends Model{
     {
         return $this->hasOne(EventVenueContract::class, 'EventID');
     }
+
+    public function eventOrganizer()
+    {
+        return $this->belongsTo(EventOrganizer::class);
+    }
+
 }

@@ -1,12 +1,21 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Event Dashboard | Home</title>
 
-@section('content')
+    <!-- Styles -->
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+</head>
+<body>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
-                        <form method="POST" action="{{ route('store.event', $id) }}">
+                        <form method="POST" action="{{ route('event.store', Auth::user()->eventOrganizerID) }}">
                             @csrf
                             <div class="row mb-3">
                                 <label for="eventName" class="col-md-4 col-form-label text-md-end">{{ __('Event Name') }}</label>
@@ -57,42 +66,18 @@
                             </div>
 
                             <div class="row mb-3">
+                                <label for="price" class="col-md-4 col-form-label text-md-end">{{ __('Ticket Price') }}</label>
+
+                                <div class="col-md-6">
+                                    <input id="price" type="number" class="form-control" name="price" autofocus>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
                                 <label for="allowedCapacity" class="col-md-4 col-form-label text-md-end">{{ __('Allowed Capacity') }}</label>
 
                                 <div class="col-md-6">
                                     <input id="allowedCapacity" type="number" class="form-control" name="allowedCapacity" autofocus>
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="bookStartDate" class="col-md-4 col-form-label text-md-end">{{ __('Book Start Date') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="bookStartDate" type="date" class="form-control" name="bookStartDate" autofocus>
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="bookEndDate " class="col-md-4 col-form-label text-md-end">{{ __('Book End Date') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="bookEndDate " type="date" class="form-control" name="bookEndDate" autofocus>
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="bookStartTime  " class="col-md-4 col-form-label text-md-end">{{ __('Book Start Time') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="bookStartTime " type="time" class="form-control" name="bookStartTime" autofocus>
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="bookEndTime   " class="col-md-4 col-form-label text-md-end">{{ __('Book End Time') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="bookEndTime " type="time" class="form-control" name="bookEndTime" autofocus>
                                 </div>
                             </div>
 
@@ -108,4 +93,5 @@
         </div>
     </div>
 
-@endsection
+</body>
+</html>

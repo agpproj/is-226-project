@@ -17,6 +17,14 @@ return [
         'guard' => 'web',
         'passwords' => 'users',
     ],
+    'venue'=>[
+        'driver'=>'eloquent',
+        'model'=>App\Models\VenueOrganizer::class,
+    ],
+    'event'=>[
+        'driver'=>'eloquent',
+        'model'=>App\Models\EventOrganizer::class,
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -39,6 +47,14 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+        ],
+        'venue'=>[
+            'driver'=>'session',
+            'provider'=>'venue_organizers',
+        ],
+        'event'=>[
+            'driver'=>'session',
+            'provider'=>'event_organizers',
         ],
     ],
 
@@ -69,6 +85,14 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+        'venue_organizers'=>[
+            'driver'=>'eloquent',
+            'model'=>App\Models\VenueOrganizer::class,
+        ],
+        'event_organizers'=>[
+            'driver'=>'eloquent',
+            'model'=>App\Models\EventOrganizer::class,
+        ],
     ],
 
     /*
@@ -92,6 +116,14 @@ return [
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,
+        ],
+        'venue_organizers'=>[
+            'driver'=>'eloquent',
+            'model'=>App\Models\VenueOrganizer::class,
+        ],
+        'event_organizers'=>[
+            'driver'=>'eloquent',
+            'model'=>App\Models\EventOrganizer::class,
         ],
     ],
 

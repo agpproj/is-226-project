@@ -1,10 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Event;
 
+use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Models\EventOrganizer;
+use App\Models\Venue;
 use App\Models\EventVenueContract;
 use Illuminate\Http\Request;
+use function view;
 
 class EventController extends Controller
 {
@@ -20,45 +24,81 @@ class EventController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for booking a venue.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($id)
+    public function createBook($id)
     {
-        return view('pages.event.createEvent', compact('id'));
+        return view('dashboard.event.event_book', compact('id'));
     }
+
     /**
-     * Store a newly created resource in storage.
+     * Show the form for creating a new event.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function createEvent()
+    {
+        return view('dashboard.event.event_create');
+    }
+
+    /**
+     * Store event
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, $id)
     {
-        $event = new Event;
-
+        $event = new Event();
         $event->EventName = $request->eventName;
         $event->EventDescription = $request->eventDescription;
         $event->EventStartDate = $request->eventStartDate;
         $event->EventEndDate = $request->eventEndDate;
         $event->EventStartTime = $request->eventStartTime;
         $event->EventEndTime = $request->eventEndTime;
+        $event->PriceValue = $request->price;
         $event->AllowedCapacity = $request->allowedCapacity;
 
-        $event->save();
+        $save = $event->save();
 
-        $event = Event::find($event->EventID);
+        $eventOrg = EventOrganizer::find($id);
+        $eventOrg->event()->attach($event->EventID);
+
+        if( $save ){
+            return redirect()->route('event.home')->with('success','You created event successfully.');
+        }else{
+            return redirect()->route('event.home')->with('fail','Something went Wrong, failed to create.');
+        }
+    }
+
+    /**
+     * Store event venue contract
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeContract(Request $request, $venueId, $eventOrgId)
+    {
         $eventVenueContract = new EventVenueContract;
         $eventVenueContract->BookStartDate = $request->bookStartDate;
         $eventVenueContract->BookEndDate = $request->bookEndDate;
         $eventVenueContract->BookStartTime = $request->bookStartTime;
         $eventVenueContract->BookEndTime = $request->bookEndTime;
-        $eventVenueContract->EventID  = $event->EventID;
-        $eventVenueContract->VenueID  = $id;
+        $eventVenueContract->eventOrganizerID  = $eventOrgId;
         $eventVenueContract->ApprovalStatus = 'Pending';
-        $event->eventVenueContract()->save($eventVenueContract);
-        return view('pages.event.createEvent', compact('id'));
+        $save = $eventVenueContract->save();
+        $contractId = $eventVenueContract->ContractID;
+
+        $venue = Venue::find($venueId);
+        $venue->eventVenueContracts()->attach($contractId);
+
+        if( $save ){
+            return redirect()->route('event.home')->with('success','You booked event successfully.');
+        }else{
+            return redirect()->route('event.home')->with('fail','Something went Wrong, failed to book event.');
+        }
     }
 
     /**

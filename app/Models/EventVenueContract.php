@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class EventVenueContract extends Model
 {
     public $timestamps = false;
+    protected $primaryKey = 'ContractID';
 //    use HasFactory;
 
-    public function event()
+    public function venues()
     {
-        return $this->belongsTo(Event::class, 'EventID');
+        return $this->belongsTo(Venue::class, 'venue_contract');
     }
 }

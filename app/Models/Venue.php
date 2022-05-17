@@ -10,4 +10,14 @@ class Venue extends Model
     //use HasFactory;
     public $timestamps = false;
     protected $primaryKey = 'VenueID';
+
+    public function eventVenueContracts()
+    {
+        return $this->belongsToMany(EventVenueContract::class, 'venue_contract', 'VenueID', 'ContractID');
+    }
+
+    public function venueOrganizer()
+    {
+        return $this->belongsTo(VenueOrganizer::class);
+    }
 }
