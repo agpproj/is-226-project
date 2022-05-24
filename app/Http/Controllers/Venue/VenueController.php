@@ -79,29 +79,12 @@ class VenueController extends Controller
         //get the venue organizer data
         $venueOrg = VenueOrganizer::find($id);
 
-        //get all the venue id created by venue organizer
-        //$venueIds = $venueOrg->venues()::pluck('VenueID')->toArray();
-        $venueIds = [];
-
-        /*foreach ($venueOrg->venues() as $venue){
-
-            if()
-            array_push($venueIds, $venue->VenueID);
-        }
-
-
         //get all the venue id related data
-        $venues = Venue::findMany($venueIds);
-
-        return view('dashboard.venue.venue_book',compact('venues'));*/
-
-        //$venues = $venueOrg->venues();
         $venueIds = $venueOrg->getUserIdsAttribute();
         $venues = Venue::findMany($venueIds);
 
         //getEventVenueContractsAttribute
         return view('dashboard.venue.venue_book',compact('venues'));
-
     }
 
     /**

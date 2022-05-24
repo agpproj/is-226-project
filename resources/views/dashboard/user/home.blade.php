@@ -35,6 +35,13 @@
                 </tr>
                 </tbody>
             </table>
+            <form method="POST" action="{{ route('event.list') }}">
+                @csrf
+                <button type="submit" formaction="{{ route('user.events') }}" class="btn btn-primary">
+                    {{ __('Events') }}
+                </button>
+            </form>
+
         </div>
     </div>
 </div>

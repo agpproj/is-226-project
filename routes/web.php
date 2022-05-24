@@ -49,6 +49,8 @@ Route::prefix('user')->name('user.')->group(function(){
 
     Route::middleware(['auth'])->group(function(){
         Route::view('/home','dashboard.user.home')->name('home');
+        Route::post('/events',[EventController::class,'showAllEvents'])->name('events');
+        Route::post('/join',[UserController::class,'join'])->name('join');
         Route::post('/logout',[UserController::class,'logout'])->name('logout');
     });
 
@@ -96,13 +98,15 @@ Route::prefix('event')->name('event.')->group(function(){
         Route::view('/home','dashboard.event.home')->name('home');
         Route::post('/create', [EventController::class, 'createEvent'])->name('create');
         Route::post('/create/book/{id}', [EventController::class, 'createBook'])->name('book');
+        Route::post('/events/{id}', [EventController::class, 'showMyEvents'])->name('my.events');
         Route::post('/store/{id}', [EventController::class, 'store'])->name('store');
+        Route::post('/edit/{id}', [EventController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [EventController::class, 'update'])->name('update');
         Route::post('/store/{venueId}/{eventOrgId}', [EventController::class, 'storeContract'])->name('store.contract');
         Route::post('/contract/{id}', [EventOrganizerController::class,'showEventContract'])->name('contract');
         Route::post('/list', [VenueController::class,'index'])->name('list');
         Route::post('/logout',[EventOrganizerController::class,'logout'])->name('logout');
     });
-
 });
 
 Route::post('/profile/{id}', [ProfileController::class, 'showProfile'])->name('profile');

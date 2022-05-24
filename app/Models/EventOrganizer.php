@@ -44,7 +44,7 @@ class EventOrganizer extends Authenticatable
     ];
 
 
-    public function event()
+    public function events()
     {
         return $this->belongsToMany(Event::class, 'event_organizer_pivot', 'eventOrganizerID', 'EventID');
     }

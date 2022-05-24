@@ -16,5 +16,4 @@ class Event extends Model{
     {
         return $this->belongsTo(EventOrganizer::class);
     }
-
 }

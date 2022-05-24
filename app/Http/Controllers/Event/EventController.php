@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\EventOrganizer;
 use App\Models\Venue;
+use App\Models\Ticket;
 use App\Models\EventVenueContract;
 use Illuminate\Http\Request;
 use function view;
@@ -63,8 +64,17 @@ class EventController extends Controller
 
         $save = $event->save();
 
+        if (!$save) {
+            return redirect()->route('event.home')->with('fail','Something went Wrong, failed to create.');
+        }
         $eventOrg = EventOrganizer::find($id);
-        $eventOrg->event()->attach($event->EventID);
+        $eventOrg->events()->attach($event->EventID);
+
+        $ticket = new Ticket();
+        $ticket->EventID = $event->EventID;
+        $ticket->PriceValue = $request->price;
+
+        $save = $ticket->save();
 
         if( $save ){
             return redirect()->route('event.home')->with('success','You created event successfully.');
@@ -114,6 +124,29 @@ class EventController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showMyEvents($id)
+    {
+        $eventOrg = EventOrganizer::find($id);
+        return view('dashboard.event.event_list', compact('eventOrg'));
+    }
+    /**
+     * Display all the events
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showAllEvents()
+    {
+        $events = Event::all();
+//        return view('dashboard.user.home', compact('events'));
+        return view('dashboard.user.event_list', compact('events'));
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -122,7 +155,7 @@ class EventController extends Controller
     public function edit($id)
     {
         $event = $this->getEventDetails($id);
-        return view('pages.event.edit_event', compact('event'));
+        return view('dashboard.event.event_edit', compact('event'));
     }
 
     /**
@@ -142,9 +175,14 @@ class EventController extends Controller
         $event->EventStartTime = $request->eventStartTime;
         $event->EventEndTime = $request->eventEndTime;
         $event->AllowedCapacity = $request->allowedCapacity;
-        $event->save();
+        $event->PriceValue = $request->price;
+        $save = $event->save();
 
-        return view('home');
+        if( $save ){
+            return redirect()->route('event.home')->with('success','You updated event successfully.');
+        }else{
+            return redirect()->route('event.home')->with('fail','Something went Wrong, failed to update event.');
+        }
     }
 
     //retrive event details of the EventID

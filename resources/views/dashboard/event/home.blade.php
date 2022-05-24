@@ -42,6 +42,9 @@
                 <button type="submit" formaction="{{ route('event.contract', Auth::user()->eventOrganizerID) }}" class="btn btn-primary">
                     {{ __('Approved Venue') }}
                 </button>
+                <button type="submit" formaction="{{ route('event.my.events', Auth::user()->eventOrganizerID) }}" class="btn btn-primary">
+                    {{ __('My Events') }}
+                </button>
             </form>
         </div>
     </div>

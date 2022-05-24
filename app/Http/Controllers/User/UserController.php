@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Purchase;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Models\User;
@@ -45,8 +47,26 @@ class UserController extends Controller
         $creds = $request->only('email','password');
         if( Auth::guard('web')->attempt($creds) ){
             return redirect()->route('user.home');
+            //$events = Event::all();
+            //return view('dashboard.user.home', compact('events'));
         }else{
             return redirect()->route('user.login')->with('fail','Incorrect credentials');
+        }
+    }
+
+    function join(){
+        $dt = Carbon::now();
+        $purchase = new Purchase();
+        $purchase->statusID = 'Registered';
+        $purchase->datePurchased = $dt->toDateString();
+        $purchase->timePurchased = $dt->toTimeString();
+
+        $save = $purchase->save();
+
+        if( $save ){
+            return redirect()->route('user.home')->with('success','You updated purchase successfully.');
+        }else{
+            return redirect()->route('user.home')->with('fail','Something went Wrong, failed to update purchase.');
         }
     }
 

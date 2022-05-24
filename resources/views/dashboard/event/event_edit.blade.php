@@ -1,11 +1,20 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Event Dashboard | Home</title>
 
-@section('content')
+    <!-- Styles -->
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+</head>
+<body>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <form method="POST" action="{{ route('update.event', $event->EventID) }}">
+                    <form method="POST" action="{{ route('event.update', $event->EventID) }}">
                         <div class="row mb-3">
                             <label for="eventName" class="col-md-4 col-form-label text-md-end">{{ __('Event Name') }}</label>
 
@@ -54,6 +63,14 @@
                         </div>
 
                         <div class="row mb-3">
+                            <label for="price" class="col-md-4 col-form-label text-md-end">{{ __('Ticket Price') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="price" type="number" class="form-control" name="price" autofocus value="{{$event->PriceValue}}">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
                             <label for="allowedCapacity" class="col-md-4 col-form-label text-md-end">{{ __('Allowed Capacity') }}</label>
 
                             <div class="col-md-6">
@@ -65,10 +82,14 @@
                         <button type="submit" class="btn btn-primary">
                             {{ __('Update') }}
                         </button>
+                        <button type="submit" formaction="{{ route('event.my.events', Auth::user()->eventOrganizerID) }}" class="btn btn-primary">
+                            {{ __('Cancel') }}
+                        </button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-@endsection
+</body>
+</html>
