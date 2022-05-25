@@ -1,4 +1,4 @@
-@extends('dashboard.event.app')
+@extends('dashboard.user.app')
 
 @section('content')
     <div class="container">
@@ -6,16 +6,15 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
-                        <form method="POST" action="{{ route('event.create') }}">
+                        <form method="POST" action="">
                             @foreach($events as $event)
-                                @if ($event->ApprovalStatus === 'Approved')
+                                <div class="card-body">
                                     @csrf
-                                    <h6>{{$event->BookStartDate}}</h6>
-                                    <h6>{{$event->ApprovalStatus}}</h6>
-                                    <button type="submit" class="btn btn-primary">
-                                        {{ __('Create Event') }}
+                                    <h3>{{$event->EventName}}</h3>
+                                    <button type="submit" formaction="{{ route('user.cancel', $event->EventID) }}" class="btn btn-primary">
+                                        {{ __('Cancel') }}
                                     </button>
-                                @endif
+                                </div>
                             @endforeach
                         </form>
                     </div>
@@ -23,5 +22,4 @@
             </div>
         </div>
     </div>
-
 @endsection

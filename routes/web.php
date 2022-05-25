@@ -38,6 +38,11 @@ Auth::routes();
 
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+
+Route::view('/user/participant','dashboard.user.login')->name('userParticipant');
+Route::view('/event/organizer','dashboard.event.login')->name('eventOrganizer');
+Route::view('/venue/organizer','dashboard.venue.login')->name('venueOrganizer');
+
 Route::prefix('user')->name('user.')->group(function(){
 
     Route::middleware(['guest'])->group(function(){
@@ -49,8 +54,11 @@ Route::prefix('user')->name('user.')->group(function(){
 
     Route::middleware(['auth'])->group(function(){
         Route::view('/home','dashboard.user.home')->name('home');
+        Route::post('/profile/{id}', [UserController::class, 'profile'])->name('profile');
         Route::post('/events',[EventController::class,'showAllEvents'])->name('events');
-        Route::post('/join',[UserController::class,'join'])->name('join');
+        Route::post('/cancel/{id}',[UserController::class,'cancel'])->name('cancel');
+        Route::post('/join/{eventId}/{userId}',[UserController::class,'join'])->name('join');
+        Route::post('/ticket/{id}',[UserController::class,'myTicket'])->name('ticket');
         Route::post('/logout',[UserController::class,'logout'])->name('logout');
     });
 
@@ -68,6 +76,7 @@ Route::prefix('venue')->name('venue.')->group(function(){
 
     Route::middleware(['auth:venue'])->group(function(){
         Route::view('/home','dashboard.venue.home')->name('home');
+        Route::post('/profile/{id}', [VenueOrganizerController::class, 'profile'])->name('profile');
         Route::post('/create', [VenueController::class,'create'])->name('create');
         Route::post('/list', [VenueController::class,'index'])->name('list');
         Route::post('/name/list/{id}', [VenueOrganizerController::class,'showAll'])->name('name.list');
@@ -96,12 +105,14 @@ Route::prefix('event')->name('event.')->group(function(){
 
     Route::middleware(['auth:event'])->group(function(){
         Route::view('/home','dashboard.event.home')->name('home');
+        Route::post('/profile/{id}', [EventOrganizerController::class, 'profile'])->name('profile');
         Route::post('/create', [EventController::class, 'createEvent'])->name('create');
         Route::post('/create/book/{id}', [EventController::class, 'createBook'])->name('book');
         Route::post('/events/{id}', [EventController::class, 'showMyEvents'])->name('my.events');
         Route::post('/store/{id}', [EventController::class, 'store'])->name('store');
         Route::post('/edit/{id}', [EventController::class, 'edit'])->name('edit');
         Route::post('/update/{id}', [EventController::class, 'update'])->name('update');
+        Route::post('/cancel/{id}', [EventController::class, 'cancel'])->name('cancel');
         Route::post('/store/{venueId}/{eventOrgId}', [EventController::class, 'storeContract'])->name('store.contract');
         Route::post('/contract/{id}', [EventOrganizerController::class,'showEventContract'])->name('contract');
         Route::post('/list', [VenueController::class,'index'])->name('list');

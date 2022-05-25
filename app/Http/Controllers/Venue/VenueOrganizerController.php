@@ -76,6 +76,12 @@ class VenueOrganizerController extends Controller
         }
     }
 
+    public function profile($id)
+    {
+        $venueOrg = VenueOrganizer::find($id);
+        return view('dashboard.venue.profile',compact('venueOrg'));
+    }
+
     function logout(){
         Auth::guard('venue')->logout();
         return redirect('/');

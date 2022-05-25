@@ -59,7 +59,7 @@ class EventController extends Controller
         $event->EventEndDate = $request->eventEndDate;
         $event->EventStartTime = $request->eventStartTime;
         $event->EventEndTime = $request->eventEndTime;
-        $event->PriceValue = $request->price;
+        $event->EventStatus = 'Open';
         $event->AllowedCapacity = $request->allowedCapacity;
 
         $save = $event->save();
@@ -71,10 +71,10 @@ class EventController extends Controller
         $eventOrg->events()->attach($event->EventID);
 
         $ticket = new Ticket();
-        $ticket->EventID = $event->EventID;
+        //$ticket->EventID = $event->EventID;
         $ticket->PriceValue = $request->price;
 
-        $save = $ticket->save();
+        $save = $event->ticket()->save($ticket);
 
         if( $save ){
             return redirect()->route('event.home')->with('success','You created event successfully.');
@@ -158,6 +158,27 @@ class EventController extends Controller
         return view('dashboard.event.event_edit', compact('event'));
     }
 
+
+    /**
+     * Cancel the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function cancel(Request $request, $id)
+    {
+        $event = Event::where('EventID', '=', $id)->first();
+        $event->EventStatus = 'Cancelled';
+        $save = $event->save();
+
+        if( $save ){
+            return redirect()->route('event.home')->with('success','You updated event successfully.');
+        }else{
+            return redirect()->route('event.home')->with('fail','Something went Wrong, failed to update event.');
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -175,8 +196,16 @@ class EventController extends Controller
         $event->EventStartTime = $request->eventStartTime;
         $event->EventEndTime = $request->eventEndTime;
         $event->AllowedCapacity = $request->allowedCapacity;
-        $event->PriceValue = $request->price;
         $save = $event->save();
+
+        if( !$save ){
+            return redirect()->route('event.home')->with('fail','Something went Wrong, failed to update event.');
+        }
+
+        $ticket = Ticket::where('EventID', '=', $event->EventID)->first();
+        $ticket->PriceValue = $request->price;
+
+        $save = $ticket->save();
 
         if( $save ){
             return redirect()->route('event.home')->with('success','You updated event successfully.');

@@ -44,7 +44,6 @@ class User extends Authenticatable
 
     public function purchase()
     {
-        return $this->hasOne(Purchase::class, 'purchaseID');
+        return $this->hasOne(Purchase::class, 'userID');
     }
-
 }

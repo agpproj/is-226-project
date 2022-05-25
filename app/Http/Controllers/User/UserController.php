@@ -4,6 +4,8 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Purchase;
+use App\Models\Ticket;
+use App\Models\Event;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -54,20 +56,53 @@ class UserController extends Controller
         }
     }
 
-    function join(){
+    function join($eventId, $userId){
         $dt = Carbon::now();
+        $ticket = Event::find($eventId)->ticket;
         $purchase = new Purchase();
         $purchase->statusID = 'Registered';
         $purchase->datePurchased = $dt->toDateString();
         $purchase->timePurchased = $dt->toTimeString();
+        $purchase->TicketID = $ticket->TicketID;
 
-        $save = $purchase->save();
+        $user = User::find($userId);
+        $save = $user->purchase()->save($purchase);
 
         if( $save ){
             return redirect()->route('user.home')->with('success','You updated purchase successfully.');
         }else{
             return redirect()->route('user.home')->with('fail','Something went Wrong, failed to update purchase.');
         }
+    }
+
+    function myTicket($id){
+        $user = User::find($id);
+        $ticketID = $user->purchase->where('statusID', 'Registered')->pluck('TicketID');
+
+        //get ticket details related to purchased ID
+        $eventIds = Ticket::findMany($ticketID)->pluck('EventID');;
+        $events = Event::findMany($eventIds);
+        return view('dashboard.user.my_ticket',compact('events'));
+    }
+
+    function cancel($id) {
+        $ticket = Event::find($id)->ticket;
+        $user = Auth::user();
+        $purchase = $user->purchase->where('TicketID', $ticket->TicketID)->first();
+
+        $purchase->statusID = 'Cancelled';
+        $save = $purchase->save();
+        if( $save ){
+            return redirect()->route('user.home')->with('success','You updated purchase successfully.');
+        }else{
+            return redirect()->route('user.home')->with('fail','Something went Wrong, failed to update purchase.');
+        }
+    }
+
+    public function profile($id)
+    {
+        $user = User::find($id);
+        return view('dashboard.user.profile',compact('user'));
     }
 
     function logout(){

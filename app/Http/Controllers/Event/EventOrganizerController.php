@@ -41,6 +41,12 @@ class EventOrganizerController extends Controller
         return view('dashboard.event.event_contract', compact('events'));
     }
 
+    public function profile($id)
+    {
+        $eventOrg = EventOrganizer::find($id);
+        return view('dashboard.event.profile',compact('eventOrg'));
+    }
+
     function check(Request $request){
         //Validate Inputs
         $request->validate([

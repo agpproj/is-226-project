@@ -10,4 +10,15 @@ class Ticket extends Model
     //use HasFactory;
     public $timestamps = false;
     protected $primaryKey = 'TicketID';
+
+    public function purchase()
+    {
+        return $this->belongsToMany(Purchase::class);
+    }
+
+    public function event(){
+
+        return $this->belongsTo(Event::class);
+    }
 }
+
