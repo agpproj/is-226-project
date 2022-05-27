@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Purchase;
 use App\Models\Ticket;
 use App\Models\Event;
+use App\Models\Feedback;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -81,8 +82,16 @@ class UserController extends Controller
 
         //get ticket details related to purchased ID
         $eventIds = Ticket::findMany($ticketID)->pluck('EventID');;
-        $events = Event::findMany($eventIds);
-        return view('dashboard.user.my_ticket',compact('events'));
+        $registeredEvents = Event::findMany($eventIds);
+
+        //scanned ticket
+        $scannedTicketID = $user->purchase->where('statusID', 'Scanned')->pluck('TicketID');
+
+        //get ticket details related to purchased ID
+        $scannedEventIds = Ticket::findMany($scannedTicketID)->pluck('EventID');;
+        $scannedEvents = Event::findMany($scannedEventIds);
+
+        return view('dashboard.user.my_ticket',compact('registeredEvents', 'scannedEvents'));
     }
 
     function cancel($id) {
@@ -97,6 +106,24 @@ class UserController extends Controller
         }else{
             return redirect()->route('user.home')->with('fail','Something went Wrong, failed to update purchase.');
         }
+    }
+
+    public function feedback(Request $request, $id){
+        $ticket = Ticket::where('EventID', $id)->first();
+        $purchase = Purchase::where('TicketID', $ticket->TicketID)->first();
+
+        $feedback = new Feedback();
+        $feedback->purchaseID =  $purchase->purchaseID;
+        $feedback->EventID =  $id;
+        $feedback->feedback =  $request->feedback;
+
+        $save = $feedback->save();
+        if( $save ){
+            return redirect()->route('user.home')->with('success','You added feedback successfully.');
+        }else{
+            return redirect()->route('user.home')->with('fail','Something went Wrong, failed to add feedback.');
+        }
+
     }
 
     public function profile($id)

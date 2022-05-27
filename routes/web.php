@@ -59,6 +59,7 @@ Route::prefix('user')->name('user.')->group(function(){
         Route::post('/cancel/{id}',[UserController::class,'cancel'])->name('cancel');
         Route::post('/join/{eventId}/{userId}',[UserController::class,'join'])->name('join');
         Route::post('/ticket/{id}',[UserController::class,'myTicket'])->name('ticket');
+        Route::post('/feedback/{id}', [UserController::class, 'feedback'])->name('feedback');
         Route::post('/logout',[UserController::class,'logout'])->name('logout');
     });
 
@@ -113,6 +114,8 @@ Route::prefix('event')->name('event.')->group(function(){
         Route::post('/edit/{id}', [EventController::class, 'edit'])->name('edit');
         Route::post('/update/{id}', [EventController::class, 'update'])->name('update');
         Route::post('/cancel/{id}', [EventController::class, 'cancel'])->name('cancel');
+        Route::post('/registered/{id}', [EventController::class, 'registeredList'])->name('registered');
+        Route::post('/attendance/{id}', [EventController::class, 'attendanceCheck'])->name('attendance');
         Route::post('/store/{venueId}/{eventOrgId}', [EventController::class, 'storeContract'])->name('store.contract');
         Route::post('/contract/{id}', [EventOrganizerController::class,'showEventContract'])->name('contract');
         Route::post('/list', [VenueController::class,'index'])->name('list');

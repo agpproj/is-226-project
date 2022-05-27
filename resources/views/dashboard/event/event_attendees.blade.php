@@ -13,16 +13,9 @@
                                     <div class="card-body">
                                     @csrf
                                     <h3>{{$event->EventName}}</h3>
-                                    <h6>{{$event->EventDescription}}</h6>
-                                    <h6>{{$event->EventStartDate}}</h6>
-                                    <h6>{{$event->EventEndDate}}</h6>
-                                    <h6>{{$event->EventStartTime}}</h6>
-                                    <h6>{{$event->EventEndTime}}</h6>
-                                    <h6>{{$event->AllowedCapacity}}</h6>
-                                    <h6>{{$event->PriceValue }}</h6>
                                     @if ($event->EventStatus == 'Open')
                                             <button type="submit" formaction="{{ route('event.edit', $event->EventID) }}" class="btn btn-primary">
-                                                {{ __('Edit Event') }}
+                                                {{ __('Track ') }}
                                             </button>
                                             <button type="submit" formaction="{{ route('event.cancel', $event->EventID) }}" class="btn btn-primary">
                                                 {{ __('Cancel Event') }}

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Event;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\EventOrganizer;
+use App\Models\Purchase;
 use App\Models\Venue;
 use App\Models\Ticket;
 use App\Models\EventVenueContract;
@@ -207,6 +208,31 @@ class EventController extends Controller
 
         $save = $ticket->save();
 
+        if( $save ){
+            return redirect()->route('event.home')->with('success','You updated event successfully.');
+        }else{
+            return redirect()->route('event.home')->with('fail','Something went Wrong, failed to update event.');
+        }
+    }
+
+    public function registeredList($id){
+        $ticketIDs = Ticket::where('EventID', $id)->pluck('TicketID');
+        $purchases = Purchase::whereIn('TicketID', $ticketIDs)->get();
+        $count = $purchases->where('purchaseID')->count();
+
+        $registeredPercentage = ($purchases->where('statusID', 'Registered')->count() / $count) * 100;
+        $scannedPercentage = ($purchases->where('statusID', 'Scanned')->count() / $count) * 100;
+        $invalidCount = $purchases->where('statusID', 'Invalid')->count();
+        $expiredCount = $purchases->where('statusID', 'Expired')->count();
+
+        return view('dashboard.event.event_purchased_ticket', compact('purchases', 'count',
+            'registeredPercentage', 'scannedPercentage', 'invalidCount', 'expiredCount'));
+    }
+
+    public function attendanceCheck($id){
+        $purchase = Purchase::find($id);
+        $purchase->statusID = 'Scanned';
+        $save = $purchase->save();
         if( $save ){
             return redirect()->route('event.home')->with('success','You updated event successfully.');
         }else{
