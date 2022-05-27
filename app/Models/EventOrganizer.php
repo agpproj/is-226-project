@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class EventOrganizer extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-
+    public $timestamps = false;
+    protected $primaryKey = 'eventOrganizerID';
     /**
      * The attributes that are mass assignable.
      *
@@ -19,6 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'companyName',
         'email',
         'password',
     ];
@@ -42,8 +43,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function purchase()
+
+    public function events()
     {
-        return $this->hasOne(Purchase::class, 'userID');
+        return $this->belongsToMany(Event::class, 'event_organizer_pivot', 'eventOrganizerID', 'EventID');
     }
+
 }

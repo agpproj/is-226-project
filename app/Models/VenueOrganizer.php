@@ -8,10 +8,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class VenueOrganizer extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-
+    public $timestamps = false;
+    protected $primaryKey = 'venueOrganizerID';
     /**
      * The attributes that are mass assignable.
      *
@@ -19,6 +20,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'companyName',
         'email',
         'password',
     ];
@@ -42,8 +44,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function purchase()
+    public function venues()
     {
-        return $this->hasOne(Purchase::class, 'userID');
+        return $this->belongsToMany(Venue::class, 'venue_organizer_places', 'VenueOrganizerID', 'VenueID');
     }
+
+    public function getUserIdsAttribute()
+    {
+        return $this->venues->pluck('VenueID');
+    }
+
 }
