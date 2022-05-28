@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Venue;
 use App\Models\VenueOrganizer;
 use App\Models\EventVenueContract;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use function view;
 
@@ -130,8 +131,11 @@ class VenueController extends Controller
      */
     public function approve(Request $request, $id)
     {
+        $dt = Carbon::now();
         $eventVenueContract = EventVenueContract::where('ContractID', '=', $id)->first();
         $eventVenueContract->ApprovalStatus = 'Approved';
+        $eventVenueContract->ApprovingPerson = $request->approvingPerson;
+        $eventVenueContract->ApprovalTimestamp = $dt->toTimeString();
         $save = $eventVenueContract->save();
 
         if( $save ){

@@ -118,7 +118,7 @@ Route::prefix('event')->name('event.')->group(function(){
         Route::post('/attendance/{id}', [EventController::class, 'attendanceCheck'])->name('attendance');
         Route::post('/store/{venueId}/{eventOrgId}', [EventController::class, 'storeContract'])->name('store.contract');
         Route::post('/contract/{id}', [EventOrganizerController::class,'showEventContract'])->name('contract');
-        Route::post('/list', [VenueController::class,'index'])->name('list');
+        Route::post('/list', [EventController::class,'index'])->name('list');
         Route::post('/logout',[EventOrganizerController::class,'logout'])->name('logout');
     });
 });

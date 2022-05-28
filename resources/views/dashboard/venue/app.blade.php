@@ -16,6 +16,11 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
@@ -70,7 +75,29 @@
             </div>
         </div>
     </nav>
+<!--    <ul class="nav nav-tabs">
+        <li class="active">
+            <a  href="#1" role="tab">Overview</a>
+        </li>
+        <li>
+            <a href="#2" role="tab">Without clearfix</a>
+        </li>
+        <li>
+            <a href="#3" role="tab">Solution</a>
+        </li>
+    </ul>
 
+    <div class="tab-content ">
+        <div class="tab-pane active" id="1">
+            <h3>Standard tab panel created on bootstrap using nav-tabs</h3>
+        </div>
+        <div class="tab-pane" id="2">
+            <h3>Notice the gap between the content and tab after applying a background color</h3>
+        </div>
+        <div class="tab-pane" id="3">
+            <h3>add clearfix to tab-content (see the css)</h3>
+        </div>
+    </div>-->
     <main class="py-4">
         @yield('content')
     </main>
