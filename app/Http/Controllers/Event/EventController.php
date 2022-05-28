@@ -21,8 +21,8 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = $this->getAllEvents();
-        return view('pages.event.event_all',compact('events'));
+        $venues = Venue::all();
+        return view('dashboard.event.venue_list',compact('venues'));
     }
 
     /**
@@ -220,8 +220,8 @@ class EventController extends Controller
         $purchases = Purchase::whereIn('TicketID', $ticketIDs)->get();
         $count = $purchases->where('purchaseID')->count();
 
-        $registeredPercentage = ($purchases->where('statusID', 'Registered')->count() / $count) * 100;
-        $scannedPercentage = ($purchases->where('statusID', 'Scanned')->count() / $count) * 100;
+        $registeredPercentage = $count != 0 ? ($purchases->where('statusID', 'Registered')->count() / $count) * 100 : 0;
+        $scannedPercentage = $count != 0 ? ($purchases->where('statusID', 'Scanned')->count() / $count) * 100 : 0;
         $invalidCount = $purchases->where('statusID', 'Invalid')->count();
         $expiredCount = $purchases->where('statusID', 'Expired')->count();
 
