@@ -4,13 +4,20 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="card">
-                    @foreach($venues as $venue)
-                        @foreach($venue->eventVenueContracts as $eventVenueContract)
-                            @if ($eventVenueContract->ApprovalStatus === 'Pending')
-                                <div style="padding: 15px">
-                                    <div class="card">
+                @foreach($venues as $venue)
+                    @foreach($venue->eventVenueContracts as $eventVenueContract)
+                        @if ($eventVenueContract->ApprovalStatus === 'Pending')
+                            <div style="padding: 15px">
+                                <div class="card">
+                                    <div class="card-body">
                                         <form method="POST" action="{{ route('venue.approve', $eventVenueContract->ContractID) }}">
+                                            <div class="row mb-1 ">
+                                                <label for="EventName" class="col-md-3 col-form-label ">{{ __('Event Name') }}</label>
+
+                                                <div class="col-md-3 col-form-label ">
+                                                    {{$eventVenueContract->EventName}}
+                                                </div>
+                                            </div>
                                             <div class="row mb-1 ">
                                                 <label for="BookStartDate" class="col-md-3 col-form-label ">{{ __('Book Start Date') }}</label>
 
@@ -49,12 +56,13 @@
                                         </form>
                                     </div>
                                 </div>
-                            @endif
-                        @endforeach
+                            </div>
+                        @endif
                     @endforeach
-                </div>
+                @endforeach
             </div>
         </div>
+    </div>
     </div>
 
 @endsection

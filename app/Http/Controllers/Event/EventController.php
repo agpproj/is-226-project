@@ -93,6 +93,7 @@ class EventController extends Controller
     public function storeContract(Request $request, $venueId, $eventOrgId)
     {
         $eventVenueContract = new EventVenueContract;
+        $eventVenueContract->EventName = $request->eventName;
         $eventVenueContract->BookStartDate = $request->bookStartDate;
         $eventVenueContract->BookEndDate = $request->bookEndDate;
         $eventVenueContract->BookStartTime = $request->bookStartTime;

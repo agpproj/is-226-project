@@ -21,4 +21,9 @@ class Event extends Model{
     {
         return $this->hasOne(Ticket::class, 'EventID');
     }
+
+    public function feedback()
+    {
+        return $this->hasOne(Feedback::class, 'EventID');
+    }
 }

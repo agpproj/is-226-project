@@ -16,11 +16,9 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.min.js" integrity="sha512-OvBgP9A2JBgiRad/mM36mkzXSXaJE9BEIENnVEmeZdITvwT09xnxLtT4twkCa8m/loMbPHsvPl0T8lRGVBwjlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
@@ -28,7 +26,7 @@
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
         <div class="container">
-            <a class="navbar-brand" href="{{ url('/') }}">
+            <a class="navbar-brand" href="{{ url('/venue/home') }}">
                 Venue
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -75,29 +73,23 @@
             </div>
         </div>
     </nav>
-<!--    <ul class="nav nav-tabs">
-        <li class="active">
-            <a  href="#1" role="tab">Overview</a>
-        </li>
-        <li>
-            <a href="#2" role="tab">Without clearfix</a>
-        </li>
-        <li>
-            <a href="#3" role="tab">Solution</a>
-        </li>
-    </ul>
+    <div class="container mt-3">
+            <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link {{request()->is('venue.home') ? 'active' : null}}" href="{{ route('venue.home') }}" >Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{request()->is('venue.create') ? 'active' : null}}" href="{{  route('venue.create') }}">Create Venue</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{request()->is('venue.name.list') ? 'active' : null}}" href="{{ route('venue.name.list', Auth::user()->venueOrganizerID) }}">My Venues</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{request()->is('venue.book.request') ? 'active' : null}}" href="{{ route('venue.book.request', Auth::user()->venueOrganizerID) }}">Booking Requests</a>
+            </li>
+        </ul>
 
-    <div class="tab-content ">
-        <div class="tab-pane active" id="1">
-            <h3>Standard tab panel created on bootstrap using nav-tabs</h3>
-        </div>
-        <div class="tab-pane" id="2">
-            <h3>Notice the gap between the content and tab after applying a background color</h3>
-        </div>
-        <div class="tab-pane" id="3">
-            <h3>add clearfix to tab-content (see the css)</h3>
-        </div>
-    </div>-->
+    </div>
     <main class="py-4">
         @yield('content')
     </main>

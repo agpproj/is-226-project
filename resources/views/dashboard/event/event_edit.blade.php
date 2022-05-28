@@ -57,7 +57,7 @@
                             <label for="price" class="col-md-4 col-form-label text-md-end">{{ __('Ticket Price') }}</label>
 
                             <div class="col-md-6">
-                                <input id="price" type="number" class="form-control" name="price" autofocus value="{{$event->PriceValue}}">
+                                <input id="price" type="number" class="form-control" name="price" autofocus value="{{$event->ticket->PriceValue}}">
                             </div>
                         </div>
 

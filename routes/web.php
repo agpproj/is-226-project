@@ -1,5 +1,12 @@
 <?php
 
+use App\Models\Event;
+use App\Models\EventOrganizer;
+use App\Models\EventVenueContract;
+use App\Models\Ticket;
+use App\Models\User;
+use App\Models\Venue;
+use App\Models\VenueOrganizer;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DataBaseController;
 use App\Http\Controllers\ProfileController;
@@ -9,7 +16,6 @@ use App\Http\Controllers\Venue\VenueController;
 use App\Http\Controllers\Event\EventOrganizerController;
 use App\Http\Controllers\Event\EventController;
 
-use App\Food;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,17 +33,8 @@ Route::get('/', function () {
 
 Route::get('/read', [DataBaseController::class, 'index']);
 Route::get('/create/{name}', [DataBaseController::class, 'create']);
-/*Route::get('/read', function(){
-    $foods = Food::all();
-    return $foods;
-
-
-});*/
 
 Auth::routes();
-
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
 
 Route::view('/user/participant','dashboard.user.login')->name('userParticipant');
 Route::view('/event/organizer','dashboard.event.login')->name('eventOrganizer');
@@ -54,6 +51,31 @@ Route::prefix('user')->name('user.')->group(function(){
 
     Route::middleware(['auth'])->group(function(){
         Route::view('/home','dashboard.user.home')->name('home');
+        Route::get('/events',function(){
+            $events = Event::all();
+            return view('dashboard.user.event_list', compact('events'));
+        })->name('events');
+        Route::get('/ticket/{id}',function($id){
+            $user = User::find($id);
+            $registeredEvents = [];
+            $scannedEvents = [];
+            if ($user->purchase != null) {
+                $ticketID = $user->purchase->where('statusID', 'Registered')->pluck('TicketID');
+
+                //get ticket details related to purchased ID
+                $eventIds = Ticket::findMany($ticketID)->pluck('EventID');;
+                $registeredEvents = Event::findMany($eventIds);
+
+                //scanned ticket
+                $scannedTicketID = $user->purchase->where('statusID', 'Scanned')->pluck('TicketID');
+
+                //get ticket details related to purchased ID
+                $scannedEventIds = Ticket::findMany($scannedTicketID)->pluck('EventID');;
+                $scannedEvents = Event::findMany($scannedEventIds);
+            }
+            return view('dashboard.user.my_ticket',compact('registeredEvents', 'scannedEvents'));
+
+        })->name('ticket');
         Route::post('/profile/{id}', [UserController::class, 'profile'])->name('profile');
         Route::post('/events',[EventController::class,'showAllEvents'])->name('events');
         Route::post('/cancel/{id}',[UserController::class,'cancel'])->name('cancel');
@@ -77,6 +99,25 @@ Route::prefix('venue')->name('venue.')->group(function(){
 
     Route::middleware(['auth:venue'])->group(function(){
         Route::view('/home','dashboard.venue.home')->name('home');
+        Route::view('/create', 'dashboard.venue.create')->name('create');
+        Route::get('/name/list/{id}',function($id) {
+            $venueOrg = VenueOrganizer::find($id);
+            return view('dashboard.venue.venue_organizer_list',compact('venueOrg'));
+        })->name('name.list');
+
+        Route::get('/book/request/{id}', function($id){
+            //get the venue organizer data
+            $venueOrg = VenueOrganizer::find($id);
+
+            //get all the venue id related data
+            $venueIds = $venueOrg->getUserIdsAttribute();
+            $venues = Venue::findMany($venueIds);
+
+            //getEventVenueContractsAttribute
+            return view('dashboard.venue.venue_book',compact('venues'));
+        })->name('book.request');
+
+
         Route::post('/profile/{id}', [VenueOrganizerController::class, 'profile'])->name('profile');
         Route::post('/create', [VenueController::class,'create'])->name('create');
         Route::post('/list', [VenueController::class,'index'])->name('list');
@@ -84,9 +125,10 @@ Route::prefix('venue')->name('venue.')->group(function(){
         Route::post('/book/request/{id}', [VenueController::class,'showAllBookingRequest'])->name('book.request');
         Route::post('/edit/{id}', [VenueController::class, 'edit'])->name('edit');
         Route::post('/update/{id}', [VenueController::class, 'update'])->name('update');
-        Route::post('/delete/{id}', [VenueController::class, 'destroy'])->name('delete');
+        Route::delete('/delete/{id}', [VenueController::class, 'destroy'])->name('delete');
         Route::post('/show/{id}', [VenueController::class,'create'])->name('show');
         Route::post('/store/{id}', [VenueController::class, 'store'])->name('store');
+        Route::post('/events/{id}', [VenueController::class, 'events'])->name('events');
         Route::post('/approve/{id}', [VenueController::class, 'approve'])->name('approve');
         Route::post('/deny/{id}', [VenueController::class, 'deny'])->name('deny');
         Route::post('/logout',[VenueOrganizerController::class,'logout'])->name('logout');
@@ -106,6 +148,18 @@ Route::prefix('event')->name('event.')->group(function(){
 
     Route::middleware(['auth:event'])->group(function(){
         Route::view('/home','dashboard.event.home')->name('home');
+        Route::get('/events/{id}', function($id){
+            $eventOrg = EventOrganizer::find($id);
+            return view('dashboard.event.event_list', compact('eventOrg'));
+        })->name('my.events');
+        Route::get('/list', function(){
+            $venues = Venue::all();
+            return view('dashboard.event.venue_list',compact('venues'));
+        })->name('list');
+        Route::get('/contract/{id}', function($id){
+            $events = EventVenueContract::where('eventOrganizerID', '=', $id)->get();
+            return view('dashboard.event.event_contract', compact('events'));
+        })->name('contract');
         Route::post('/profile/{id}', [EventOrganizerController::class, 'profile'])->name('profile');
         Route::post('/create', [EventController::class, 'createEvent'])->name('create');
         Route::post('/create/book/{id}', [EventController::class, 'createBook'])->name('book');
