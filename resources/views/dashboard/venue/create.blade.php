@@ -12,7 +12,7 @@
                             <label for="venueName" class="col-md-4 col-form-label text-md-end">{{ __('Venue Name') }}</label>
 
                             <div class="col-md-6">
-                                <input id="venueName" type="text" class="form-control" name="venueName" autofocus>
+                                <input id="venueName" type="text" class="form-control" name="venueName" autofocus required>
                             </div>
                         </div>
 
@@ -20,12 +20,12 @@
                             <label for="maxCapacity" class="col-md-4 col-form-label text-md-end">{{ __('Max Capacity') }}</label>
 
                             <div class="col-md-6">
-                                <input id="maxCapacity" type="number" class="form-control" name="maxCapacity" autofocus>
+                                <input id="maxCapacity" type="number" class="form-control" name="maxCapacity" autofocus required>
                             </div>
                         </div>
 
                         <button type="submit" class="btn btn-primary">
-                            {{ __('Submit') }}
+                            {{ __('Create') }}
                         </button>
 
                     </form>

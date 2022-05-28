@@ -55,10 +55,13 @@
                                                     <td>{{ $purchase->TicketID }}</td>
                                                     <td>
                                                         @if ($purchase->statusID == 'Registered')
-                                                            <a href="{{ route('event.attendance', $purchase->purchaseID) }}" onclick="event.preventDefault();document.getElementById('confirm-ticket').submit();">Confirm</a>
-                                                            <form action="{{ route('venue.logout') }}" method="post" class="d-none" id="confirm-ticket">@csrf</form>
+<!--                                                            <a href="{{ route('event.attendance', $purchase->purchaseID) }}" onclick="event.preventDefault();document.getElementById('attendance').submit();">Confirm attendance</a>
+                                                            <form action="{{ route('event.attendance', $purchase->purchaseID) }}" method="post" class="d-none" id="attendance">@csrf</form>-->
+                                                            <button type="submit" formaction="{{ route('event.attendance', $purchase->purchaseID) }}" class="d-none">
+                                                                {{ __('Confirm Attendance') }}
+                                                            </button>
                                                         @else
-                                                            {{ __('Attendance Confirm') }}
+                                                            {{ __('Attendance Confirmed') }}
                                                         @endif
                                                     </td>
                                                 </tr>

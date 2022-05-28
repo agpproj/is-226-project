@@ -9,6 +9,14 @@
                         <form method="POST" action="{{ route('event.store.contract', ['venueId'=>$id, 'eventOrgId'=>Auth::user()->eventOrganizerID]) }}">
                             @csrf
                             <div class="row mb-3">
+                                <label for="eventName" class="col-md-4 col-form-label text-md-end">{{ __('Event Name') }}</label>
+
+                                <div class="col-md-6">
+                                    <input id="eventName" type="text" class="form-control" name="eventName" autofocus>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
                                 <label for="bookStartDate" class="col-md-4 col-form-label text-md-end">{{ __('Book Start Date') }}</label>
 
                                 <div class="col-md-6">

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Venue;
 use App\Models\VenueOrganizer;
 use App\Models\EventVenueContract;
+use App\Models\VenueOrganizerPlace;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use function view;
@@ -66,7 +67,7 @@ class VenueController extends Controller
      */
     public function show($id)
     {
-        $venue =$this->getVenueDetails($id);
+        $venue = Venue::find($id);
         return view('pages.venue.venue_details', compact('venue'));
     }
 
@@ -96,7 +97,7 @@ class VenueController extends Controller
      */
     public function edit($id)
     {
-        $venue = $this->getVenueDetails($id);
+        $venue = Venue::find($id);
         return view('dashboard.venue.venue_edit', compact('venue'));
     }
 
@@ -174,17 +175,25 @@ class VenueController extends Controller
      */
     public function destroy($id)
     {
-        $venue = getVenueDetails($id);
-        $delete =$venue->delete();
-        if( $delete ){
+        $venueOrgPlace = VenueOrganizerPlace::where('VenueID', $id);
+        $venueOrgPlace->delete();
+        $venue = Venue::find($id);
+        $delete = $venue->delete();
+
+/*        if( $delete ){
             return redirect()->route('venue.home')->with('success','You deleted venue successfully.');
         }else{
             return redirect()->route('venue.home')->with('fail','Something went Wrong, failed to delete');
-        }
+        }*/
     }
 
-    private function getVenueDetails($id){
-        return Venue::find($id);
+    public function events($id){
+        $venue = Venue::find($id);
+        $eventVenueContracts = $venue->eventVenueContracts()->get();
+        $contractIDs = $eventVenueContracts->pluck('ContractID');
+        $count = $contractIDs->count();
+
+        return view('dashboard.venue.venue_events', compact('eventVenueContracts', 'count'));
     }
 
 }

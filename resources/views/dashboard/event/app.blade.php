@@ -16,6 +16,10 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.min.js" integrity="sha512-OvBgP9A2JBgiRad/mM36mkzXSXaJE9BEIENnVEmeZdITvwT09xnxLtT4twkCa8m/loMbPHsvPl0T8lRGVBwjlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
@@ -23,7 +27,7 @@
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
         <div class="container">
-            <a class="navbar-brand" href="{{ url('/') }}">
+            <a class="navbar-brand" href="{{ url('/event/home') }}">
                 Events
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -70,7 +74,22 @@
             </div>
         </div>
     </nav>
-
+    <div class="container mt-3">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link {{request()->is('event.home') ? 'active' : null}}" href="{{ route('event.home') }}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{request()->is('event.my.events') ? 'active' : null}}" href="{{ route('event.my.events', Auth::user()->eventOrganizerID) }}" >My Events</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{request()->is('event.list') ? 'active' : null}}" href="{{  route('event.list') }}">Book Venue</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{request()->is('event.contract') ? 'active' : null}}" href="{{  route('event.contract', Auth::user()->eventOrganizerID) }}">Approved Venue</a>
+            </li>
+        </ul>
+    </div>
     <main class="py-4">
         @yield('content')
     </main>
