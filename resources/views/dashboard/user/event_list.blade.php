@@ -4,14 +4,15 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                    <form method="POST" action="">
-                        @foreach($events as $event)
+                <form method="POST" action="">
+                    @foreach($events as $event)
+                        @if($event->EventStatus != 'Cancelled')
                             <div style="padding: 15px">
                                 <div class="card">
                                     <div class="card-body">
                                         @csrf
                                         <div>
-                                            <label for="EventName" class="col-md-3 col-form-label ">
+                                            <label for="EventName" class="col-md-5 col-form-label ">
                                                 <h4>{{$event->EventName}}</h4>
                                             </label>
                                         </div>
@@ -53,11 +54,12 @@
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
-                    </form>
-                </div>
+                        @endif
+                    @endforeach
+                </form>
             </div>
         </div>
+    </div>
     </div>
 
 @endsection
