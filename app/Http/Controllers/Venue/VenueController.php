@@ -53,9 +53,9 @@ class VenueController extends Controller
         $venueOrganizer->venues()->attach($venue->VenueID);
 
         if( $save ){
-            return redirect()->route('venue.home')->with('success','You created venue successfully.');
+            return redirect()->route('venue.create')->with('success','You created venue successfully.');
         }else{
-            return redirect()->route('venue.home')->with('fail','Something went Wrong, failed to create');
+            return redirect()->route('venue.create')->with('fail','Something went Wrong, failed to create');
         }
     }
 
@@ -116,9 +116,9 @@ class VenueController extends Controller
         $save = $venue->save();
 
         if( $save ){
-            return redirect()->route('venue.home')->with('success','You updated venue successfully.');
+            return redirect()->route('venue.name.list', Auth::user()->venueOrganizerID)->with('success','You updated venue successfully.');
         }else{
-            return redirect()->route('venue.home')->with('fail','Something went Wrong, failed to update');
+            return redirect()->route('venue.name.list', Auth::user()->venueOrganizerID)->with('fail','Something went Wrong, failed to update');
         }
     }
 
@@ -140,9 +140,9 @@ class VenueController extends Controller
         $save = $eventVenueContract->save();
 
         if( $save ){
-            return redirect()->route('venue.home')->with('success','You updated venue successfully.');
+            return redirect()->route('venue.book.request', Auth::user()->venueOrganizerID)->with('success','You updated venue successfully.');
         }else{
-            return redirect()->route('venue.home')->with('fail','Something went Wrong, failed to update');
+            return redirect()->route('venue.book.request', Auth::user()->venueOrganizerID)->with('fail','Something went Wrong, failed to update');
         }
     }
 
@@ -161,9 +161,9 @@ class VenueController extends Controller
         $save = $eventVenueContract->save();
 
         if( $save ){
-            return redirect()->route('venue.home')->with('success','You updated venue successfully.');
+            return redirect()->route('venue.book.request', Auth::user()->venueOrganizerID)->with('success','You updated venue successfully.');
         }else{
-            return redirect()->route('venue.home')->with('fail','Something went Wrong, failed to update');
+            return redirect()->route('venue.book.request', Auth::user()->venueOrganizerID)->with('fail','Something went Wrong, failed to update');
         }
     }
 
@@ -180,11 +180,11 @@ class VenueController extends Controller
         $venue = Venue::find($id);
         $delete = $venue->delete();
 
-/*        if( $delete ){
-            return redirect()->route('venue.home')->with('success','You deleted venue successfully.');
+        if( $delete ){
+            return redirect()->route('venue.name.list', Auth::user()->venueOrganizerID)->with('success','You deleted venue successfully.');
         }else{
-            return redirect()->route('venue.home')->with('fail','Something went Wrong, failed to delete');
-        }*/
+            return redirect()->route('venue.name.list', Auth::user()->venueOrganizerID)->with('fail','Something went Wrong, failed to delete');
+        }
     }
 
     public function events($id){

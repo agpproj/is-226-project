@@ -70,9 +70,9 @@ class UserController extends Controller
         $save = $user->purchase()->save($purchase);
 
         if( $save ){
-            return redirect()->route('user.home')->with('success','You updated purchase successfully.');
+            return redirect()->route('user.ticket', Auth::user()->id)->with('success','You updated purchase successfully.');
         }else{
-            return redirect()->route('user.home')->with('fail','Something went Wrong, failed to update purchase.');
+            return redirect()->route('user.ticket', Auth::user()->id)->with('fail','Something went Wrong, failed to update purchase.');
         }
     }
 
@@ -102,9 +102,9 @@ class UserController extends Controller
         $purchase->statusID = 'Cancelled';
         $save = $purchase->save();
         if( $save ){
-            return redirect()->route('user.home')->with('success','You updated purchase successfully.');
+            return redirect()->route('user.ticket', Auth::user()->id)->with('success','You updated purchase successfully.');
         }else{
-            return redirect()->route('user.home')->with('fail','Something went Wrong, failed to update purchase.');
+            return redirect()->route('user.ticket', Auth::user()->id)->with('fail','Something went Wrong, failed to update purchase.');
         }
     }
 
@@ -116,12 +116,13 @@ class UserController extends Controller
         $feedback->purchaseID =  $purchase->purchaseID;
         $feedback->EventID =  $id;
         $feedback->feedback =  $request->feedback;
+        $feedback->rating =  $request->rating;
 
         $save = $feedback->save();
         if( $save ){
-            return redirect()->route('user.home')->with('success','You added feedback successfully.');
+            return redirect()->route('user.ticket', Auth::user()->id)->with('success','You added feedback successfully.');
         }else{
-            return redirect()->route('user.home')->with('fail','Something went Wrong, failed to add feedback.');
+            return redirect()->route('user.ticket', Auth::user()->id)->with('fail','Something went Wrong, failed to add feedback.');
         }
 
     }

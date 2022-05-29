@@ -61,11 +61,11 @@
                                                     <button type="submit" formaction="{{ route('event.edit', $event->EventID) }}" class="btn btn-primary">
                                                         {{ __('Edit Event') }}
                                                     </button>
-                                                    <button type="submit" formaction="{{ route('event.cancel', $event->EventID) }}" class="btn btn-primary">
-                                                        {{ __('Cancel Event') }}
-                                                    </button>
                                                     <button type="submit" formaction="{{ route('event.registered', $event->EventID) }}" class="btn btn-primary">
                                                         {{ __('Attendees') }}
+                                                    </button>
+                                                    <button type="submit" formaction="{{ route('event.cancel', $event->EventID) }}" class="btn btn-danger">
+                                                        {{ __('Cancel Event') }}
                                                     </button>
                                                 @else
                                                     <button type="submit" formaction="{{ route('event.edit', $event->EventID) }}" class="btn btn-primary" disabled>
