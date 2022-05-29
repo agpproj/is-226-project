@@ -27,17 +27,22 @@
                                     <button type="submit" class="btn btn-primary" class="btn btn-primary">
                                         {{ __('Update') }}
                                     </button>
-                                    @csrf
-                                    <button type="submit" formaction="{{ route('venue.events', $venue->VenueID) }}" class="btn btn-primary" class="btn btn-primary">
-                                        {{ __('Events') }}
-                                    </button>
                                     @if($venue->eventVenueContracts->count() == 0)
+                                        <button type="submit" formaction="{{ route('venue.events', $venue->VenueID) }}" class="btn btn-primary" class="btn btn-primary" disabled>
+                                            {{ __('Events') }}
+                                        </button>
+
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"  formaction="{{ route('venue.delete', $venue->VenueID) }}" confirm="Are your sure?" class="btn btn-danger">
                                             {{ __('Delete') }}
                                         </button>
                                     @else
+                                        @csrf
+                                        <button type="submit" formaction="{{ route('venue.events', $venue->VenueID) }}" class="btn btn-primary" class="btn btn-primary">
+                                            {{ __('Events') }}
+                                        </button>
+
                                         <button type="submit"  formaction="{{ route('venue.delete', $venue->VenueID) }}" confirm="Are your sure?" class="btn btn-danger" class="btn btn-primary" disabled>
                                             {{ __('Delete') }}
                                         </button>

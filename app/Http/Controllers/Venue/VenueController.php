@@ -10,7 +10,7 @@ use App\Models\VenueOrganizerPlace;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use function view;
-
+use Illuminate\Support\Facades\Auth;
 class VenueController extends Controller
 {
     /**
