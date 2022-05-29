@@ -160,6 +160,7 @@ Route::prefix('event')->name('event.')->group(function(){
             $events = EventVenueContract::where('eventOrganizerID', '=', $id)->get();
             return view('dashboard.event.event_contract', compact('events'));
         })->name('contract');
+        Route::get('/registered/{id}', [EventController::class, 'registeredList'])->name('registered');
         Route::post('/profile/{id}', [EventOrganizerController::class, 'profile'])->name('profile');
         Route::post('/create', [EventController::class, 'createEvent'])->name('create');
         Route::post('/create/book/{id}', [EventController::class, 'createBook'])->name('book');
@@ -174,6 +175,8 @@ Route::prefix('event')->name('event.')->group(function(){
         Route::post('/contract/{id}', [EventOrganizerController::class,'showEventContract'])->name('contract');
         Route::post('/list', [EventController::class,'index'])->name('list');
         Route::post('/logout',[EventOrganizerController::class,'logout'])->name('logout');
+
+        //for redirect back
     });
 });
 

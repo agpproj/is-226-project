@@ -10,6 +10,7 @@ use App\Models\Venue;
 use App\Models\Ticket;
 use App\Models\EventVenueContract;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use function view;
 
 class EventController extends Controller
@@ -78,9 +79,9 @@ class EventController extends Controller
         $save = $event->ticket()->save($ticket);
 
         if( $save ){
-            return redirect()->route('event.home')->with('success','You created event successfully.');
+            return redirect()->route('event.contract', Auth::user()->eventOrganizerID)->with('success','You created event successfully.');
         }else{
-            return redirect()->route('event.home')->with('fail','Something went Wrong, failed to create.');
+            return redirect()->route('event.contract', Auth::user()->eventOrganizerID)->with('fail','Something went Wrong, failed to create.');
         }
     }
 
@@ -100,16 +101,16 @@ class EventController extends Controller
         $eventVenueContract->BookEndTime = $request->bookEndTime;
         $eventVenueContract->eventOrganizerID  = $eventOrgId;
         $eventVenueContract->ApprovalStatus = 'Pending';
-        $save = $eventVenueContract->save();
+        $eventVenueContract->save();
         $contractId = $eventVenueContract->ContractID;
 
         $venue = Venue::find($venueId);
-        $venue->eventVenueContracts()->attach($contractId);
+        $save = $venue->eventVenueContracts()->attach($contractId);
 
         if( $save ){
-            return redirect()->route('event.home')->with('success','You booked event successfully.');
+            return redirect()->route('event.list')->with('success','You booked event successfully.');
         }else{
-            return redirect()->route('event.home')->with('fail','Something went Wrong, failed to book event.');
+            return redirect()->route('event.list')->with('fail','Something went Wrong, failed to book event.');
         }
     }
 
@@ -175,9 +176,9 @@ class EventController extends Controller
         $save = $event->save();
 
         if( $save ){
-            return redirect()->route('event.home')->with('success','You updated event successfully.');
+            return redirect()->route('event.my.events', Auth::user()->eventOrganizerID)->with('fail','Something went Wrong, failed to update event.');
         }else{
-            return redirect()->route('event.home')->with('fail','Something went Wrong, failed to update event.');
+            return redirect()->route('event.my.events', Auth::user()->eventOrganizerID)->with('fail','Something went Wrong, failed to update event.');
         }
     }
 
@@ -201,7 +202,7 @@ class EventController extends Controller
         $save = $event->save();
 
         if( !$save ){
-            return redirect()->route('event.home')->with('fail','Something went Wrong, failed to update event.');
+            return redirect()->route('event.my.events', Auth::user()->eventOrganizerID)->with('fail','Something went Wrong, failed to update event.');
         }
 
         $ticket = Ticket::where('EventID', '=', $event->EventID)->first();
@@ -210,9 +211,9 @@ class EventController extends Controller
         $save = $ticket->save();
 
         if( $save ){
-            return redirect()->route('event.home')->with('success','You updated event successfully.');
+            return redirect()->route('event.my.events', Auth::user()->eventOrganizerID)->with('success','You updated event successfully');
         }else{
-            return redirect()->route('event.home')->with('fail','Something went Wrong, failed to update event.');
+            return redirect()->route('event.my.events', Auth::user()->eventOrganizerID)->with('fail','Something went Wrong, failed to update event.');
         }
     }
 
@@ -221,7 +222,7 @@ class EventController extends Controller
         $purchases = Purchase::whereIn('TicketID', $ticketIDs)->get();
         $count = $purchases->where('purchaseID')->count();
 
-        $registeredPercentage = $count != 0 ? ($purchases->where('statusID', 'Registered')->count() / $count) * 100 : 0;
+        $registeredPercentage = $count != 0 ? ($purchases->count() / $count) * 100 : 0;
         $scannedPercentage = $count != 0 ? ($purchases->where('statusID', 'Scanned')->count() / $count) * 100 : 0;
         $invalidCount = $purchases->where('statusID', 'Invalid')->count();
         $expiredCount = $purchases->where('statusID', 'Expired')->count();
@@ -234,10 +235,12 @@ class EventController extends Controller
         $purchase = Purchase::find($id);
         $purchase->statusID = 'Scanned';
         $save = $purchase->save();
+
+        $ticket = Ticket::find($purchase->TicketID);
         if( $save ){
-            return redirect()->route('event.home')->with('success','You updated event successfully.');
+            return redirect()->route('event.registered', $ticket->EventID)->with('success','You updated event successfully.');
         }else{
-            return redirect()->route('event.home')->with('fail','Something went Wrong, failed to update event.');
+            return redirect()->route('event.registered', $ticket->EventID)->with('fail','Something went Wrong, failed to update event.');
         }
     }
 
