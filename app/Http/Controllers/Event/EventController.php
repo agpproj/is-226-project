@@ -145,7 +145,7 @@ class EventController extends Controller
     public function showAllEvents()
     {
         $events = Event::all();
-//        return view('dashboard.user.home', compact('events'));
+
         return view('dashboard.user.event_list', compact('events'));
     }
 
